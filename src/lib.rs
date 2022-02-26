@@ -3,6 +3,7 @@ pub mod builder;
 pub mod client;
 pub mod config;
 pub mod error;
+pub mod repo;
 pub mod user;
 
 pub use error::{Error, Result};

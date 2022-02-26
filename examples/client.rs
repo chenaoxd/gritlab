@@ -17,5 +17,8 @@ async fn main() -> Result<()> {
     let user = cli.current_user().await?;
     println!("current_user: {:#?}", user);
 
+    let _repos = cli.list_repos().await?;
+    // println!("repos: {:#?}", repos);
+
     Ok(())
 }

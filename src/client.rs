@@ -5,7 +5,10 @@ use url::Url;
 
 use reqwest::{Client, RequestBuilder};
 
-use crate::{builder::GritlabBuilder, config::Config, user::User, Error, Result};
+use crate::{
+    builder::GritlabBuilder, config::Config, repo::Repository, user::User, Error,
+    Result,
+};
 
 #[derive(Debug, Clone)]
 pub struct Gritlab {
@@ -46,8 +49,6 @@ impl Gritlab {
         let url = self.api_url(rel_url)?;
         let auth_header = self.headers()?;
 
-        println!("{:#?}", auth_header);
-
         Ok(self
             .cli
             .request(method, url)
@@ -63,15 +64,15 @@ impl Gritlab {
     // ===============================================
     pub async fn current_user(&self) -> Result<User> {
         let resp = self.request(Method::GET, "user")?.send().await?;
-
         resp_json(resp, "get user failed").await
     }
 
     // ===============================================
     // Repository related apis
     // ===============================================
-    pub async fn list_repos(&self) {
-        todo!()
+    pub async fn list_repos(&self) -> Result<Vec<Repository>> {
+        let resp = self.request(Method::GET, "projects")?.send().await?;
+        resp_json(resp, "list repos failed").await
     }
 }
 
@@ -102,4 +103,8 @@ pub async fn check_success(resp: reqwest::Response, err_mes: &str) -> Result<()>
     } else {
         Ok(())
     }
+}
+
+pub async fn debug_resp(resp: reqwest::Response, start: usize) {
+    println!("{:#?}", &resp.text().await.unwrap()[start..start + 50]);
 }
