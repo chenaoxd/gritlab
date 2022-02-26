@@ -47,6 +47,14 @@ pub struct Owner {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Group {
+    pub group_id: i32,
+    pub group_name: String,
+    pub group_full_path: String,
+    pub group_access_level: i32,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Access {
     access_level: i32,
     notification_level: i32,
@@ -118,8 +126,7 @@ pub struct Repository {
     pub auto_cancel_pending_pipelines: String,
     pub build_coverage_regex: Option<String>,
     pub ci_config_path: Option<String>,
-    // TODO
-    pub shared_with_groups: Vec<String>,
+    pub shared_with_groups: Vec<Group>,
     pub only_allow_merge_if_pipeline_succeeds: bool,
     pub allow_merge_on_skipped_pipeline: Option<bool>,
     pub restrict_user_defined_variables: bool,
@@ -136,8 +143,6 @@ pub struct Repository {
     // TODO
     // pub requirements_enabled: Option<String>,
     pub security_and_compliance_enabled: bool,
-    // TODO
-    // pub compliance_frameworks: Vec<String>,
-    // TODO
+    pub compliance_frameworks: Vec<String>,
     pub permissions: Permissions,
 }

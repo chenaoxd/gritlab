@@ -20,5 +20,8 @@ async fn main() -> Result<()> {
     let _repos = cli.list_repos().await?;
     // println!("repos: {:#?}", repos);
 
+    let repo = cli.get_repo(owner, repo).await?;
+    println!("repo: {:#?}", repo);
+
     Ok(())
 }

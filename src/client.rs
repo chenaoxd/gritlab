@@ -52,7 +52,6 @@ impl Gritlab {
         Ok(self
             .cli
             .request(method, url)
-            .header("Content-Type", "application/json")
             .header(auth_header.0, auth_header.1))
     }
 }
@@ -62,6 +61,8 @@ impl Gritlab {
     // ===============================================
     // User related apis
     // ===============================================
+
+    /// Get the user who owns the auth_token
     pub async fn current_user(&self) -> Result<User> {
         let resp = self.request(Method::GET, "user")?.send().await?;
         resp_json(resp, "get user failed").await
@@ -70,9 +71,20 @@ impl Gritlab {
     // ===============================================
     // Repository related apis
     // ===============================================
+    //
+    /// List all the repos which the user has permission to
     pub async fn list_repos(&self) -> Result<Vec<Repository>> {
         let resp = self.request(Method::GET, "projects")?.send().await?;
         resp_json(resp, "list repos failed").await
+    }
+
+    /// Get the specified repo
+    pub async fn get_repo(&self, owner: &str, repo: &str) -> Result<Repository> {
+        let resp = self
+            .request(Method::GET, &format!("projects/{}%2F{}", owner, repo))?
+            .send()
+            .await?;
+        resp_json(resp, "get repo failed").await
     }
 }
 
