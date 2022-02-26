@@ -20,8 +20,11 @@ async fn main() -> Result<()> {
     let _repos = cli.list_repos().await?;
     // println!("repos: {:#?}", repos);
 
-    let repo = cli.get_repo(owner, repo).await?;
-    println!("repo: {:#?}", repo);
+    let repo_ = cli.get_repo(owner, repo).await?;
+    println!("repo: {:#?}", repo_);
+
+    let hooks = cli.list_hooks(owner, repo).await?;
+    println!("hooks: {:#?}", hooks);
 
     Ok(())
 }

@@ -1,13 +1,17 @@
+use hmac::digest::generic_array::typenum::IsLessOrEqual;
 use http::Method;
 use serde::de::DeserializeOwned;
-use std::sync::{Arc, RwLock};
+use std::{
+    fmt::format,
+    sync::{Arc, RwLock},
+};
 use url::Url;
 
 use reqwest::{Client, RequestBuilder};
 
 use crate::{
-    builder::GritlabBuilder, config::Config, repo::Repository, user::User, Error,
-    Result,
+    builder::GritlabBuilder, config::Config, hook::Hook, repo::Repository, user::User,
+    Error, Result,
 };
 
 #[derive(Debug, Clone)]
@@ -71,7 +75,7 @@ impl Gritlab {
     // ===============================================
     // Repository related apis
     // ===============================================
-    //
+
     /// List all the repos which the user has permission to
     pub async fn list_repos(&self) -> Result<Vec<Repository>> {
         let resp = self.request(Method::GET, "projects")?.send().await?;
@@ -81,10 +85,22 @@ impl Gritlab {
     /// Get the specified repo
     pub async fn get_repo(&self, owner: &str, repo: &str) -> Result<Repository> {
         let resp = self
-            .request(Method::GET, &format!("projects/{}%2F{}", owner, repo))?
+            .request(Method::GET, &format!("projects/{}", repo_path(owner, repo)))?
             .send()
             .await?;
         resp_json(resp, "get repo failed").await
+    }
+
+    /// List webhooks of a repo
+    pub async fn list_hooks(&self, owner: &str, repo: &str) -> Result<Vec<Hook>> {
+        let resp = self
+            .request(
+                Method::GET,
+                &format!("projects/{}/hooks", repo_path(owner, repo)),
+            )?
+            .send()
+            .await?;
+        resp_json(resp, "list repo hooks failed").await
     }
 }
 
@@ -115,6 +131,10 @@ pub async fn check_success(resp: reqwest::Response, err_mes: &str) -> Result<()>
     } else {
         Ok(())
     }
+}
+
+pub fn repo_path(owner: &str, repo: &str) -> String {
+    format!("{}%2F{}", owner, repo)
 }
 
 pub async fn debug_resp(resp: reqwest::Response, start: usize) {
