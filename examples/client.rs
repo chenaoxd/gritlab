@@ -6,6 +6,7 @@ use gritlab::{client::Gritlab, hook::CreateHookOption, Result};
 #[tokio::main]
 async fn main() -> Result<()> {
     let (owner, repo) = ("contract", "scheduler");
+    let commit_id = "9ff565bcda2f8c88c5f095baed9c92ca13e8e9b4";
 
     let host = env::var("HOST")
         .with_context(|| format!("get environment variable HOST failed"))?;
@@ -39,6 +40,9 @@ async fn main() -> Result<()> {
     println!("hooks: {:#?}", hooks);
 
     cli.delete_hook(owner, repo, hook.id).await?;
+
+    let statuses = cli.list_status(owner, repo, commit_id).await?;
+    println!("statuses: {:#?}", statuses);
 
     Ok(())
 }

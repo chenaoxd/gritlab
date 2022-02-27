@@ -5,6 +5,7 @@ pub mod config;
 pub mod error;
 pub mod hook;
 pub mod repo;
+pub mod status;
 pub mod user;
 
 pub use error::{Error, Result};

@@ -10,6 +10,7 @@ use crate::{
     config::Config,
     hook::{CreateHookOption, Hook},
     repo::Repository,
+    status::Status,
     user::User,
     Error, Result,
 };
@@ -109,7 +110,6 @@ impl Gritlab {
             .json(opt)
             .send()
             .await?;
-
         resp_json(resp, "create hook failed").await
     }
 
@@ -121,7 +121,6 @@ impl Gritlab {
             )?
             .send()
             .await?;
-
         check_success(resp, &format!("delete hook-{} failed", id)).await
     }
 
@@ -135,6 +134,31 @@ impl Gritlab {
             .send()
             .await?;
         resp_json(resp, "list repo hooks failed").await
+    }
+
+    // ===============================================
+    // Commit related apis
+    // ===============================================
+
+    /// List statuses of the commit
+    pub async fn list_statuses(
+        &self,
+        owner: &str,
+        repo: &str,
+        commit: &str,
+    ) -> Result<Vec<Status>> {
+        let resp = self
+            .request(
+                Method::GET,
+                &format!(
+                    "projects/{}/repository/commits/{}/statuses",
+                    repo_path(owner, repo),
+                    commit
+                ),
+            )?
+            .send()
+            .await?;
+        resp_json(resp, &format!("get status of commit-{} failed", commit)).await
     }
 }
 
