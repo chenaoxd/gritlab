@@ -38,5 +38,7 @@ async fn main() -> Result<()> {
     let hooks = cli.list_hooks(owner, repo).await?;
     println!("hooks: {:#?}", hooks);
 
+    cli.delete_hook(owner, repo, hook.id).await?;
+
     Ok(())
 }

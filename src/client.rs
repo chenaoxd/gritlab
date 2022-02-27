@@ -94,18 +94,6 @@ impl Gritlab {
         resp_json(resp, "get repo failed").await
     }
 
-    /// List webhooks of a repo
-    pub async fn list_hooks(&self, owner: &str, repo: &str) -> Result<Vec<Hook>> {
-        let resp = self
-            .request(
-                Method::GET,
-                &format!("projects/{}/hooks", repo_path(owner, repo)),
-            )?
-            .send()
-            .await?;
-        resp_json(resp, "list repo hooks failed").await
-    }
-
     /// Create a webhook
     pub async fn create_hook(
         &self,
@@ -123,6 +111,30 @@ impl Gritlab {
             .await?;
 
         resp_json(resp, "create hook failed").await
+    }
+
+    pub async fn delete_hook(&self, owner: &str, repo: &str, id: i32) -> Result<()> {
+        let resp = self
+            .request(
+                Method::DELETE,
+                &format!("projects/{}/hooks/{}", repo_path(owner, repo), id),
+            )?
+            .send()
+            .await?;
+
+        check_success(resp, &format!("delete hook-{} failed", id)).await
+    }
+
+    /// List webhooks of a repo
+    pub async fn list_hooks(&self, owner: &str, repo: &str) -> Result<Vec<Hook>> {
+        let resp = self
+            .request(
+                Method::GET,
+                &format!("projects/{}/hooks", repo_path(owner, repo)),
+            )?
+            .send()
+            .await?;
+        resp_json(resp, "list repo hooks failed").await
     }
 }
 
