@@ -1,16 +1,16 @@
-use hmac::digest::generic_array::typenum::IsLessOrEqual;
 use http::Method;
 use serde::de::DeserializeOwned;
-use std::{
-    fmt::format,
-    sync::{Arc, RwLock},
-};
+use std::sync::{Arc, RwLock};
 use url::Url;
 
 use reqwest::{Client, RequestBuilder};
 
 use crate::{
-    builder::GritlabBuilder, config::Config, hook::Hook, repo::Repository, user::User,
+    builder::GritlabBuilder,
+    config::Config,
+    hook::{CreateHookOption, Hook},
+    repo::Repository,
+    user::User,
     Error, Result,
 };
 
@@ -50,6 +50,9 @@ impl Gritlab {
     }
 
     pub fn request(&self, method: Method, rel_url: &str) -> Result<RequestBuilder> {
+        if rel_url.starts_with("/") {
+            return Err(Error::Other("rel_url shouldn't starts_with /".to_string()));
+        }
         let url = self.api_url(rel_url)?;
         let auth_header = self.headers()?;
 
@@ -101,6 +104,25 @@ impl Gritlab {
             .send()
             .await?;
         resp_json(resp, "list repo hooks failed").await
+    }
+
+    /// Create a webhook
+    pub async fn create_hook(
+        &self,
+        owner: &str,
+        repo: &str,
+        opt: &CreateHookOption,
+    ) -> Result<Hook> {
+        let resp = self
+            .request(
+                Method::POST,
+                &format!("projects/{}/hooks", repo_path(owner, repo)),
+            )?
+            .json(opt)
+            .send()
+            .await?;
+
+        resp_json(resp, "create hook failed").await
     }
 }
 

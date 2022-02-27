@@ -1,7 +1,7 @@
 use std::env;
 
 use anyhow::Context;
-use gritlab::{client::Gritlab, Result};
+use gritlab::{client::Gritlab, hook::CreateHookOption, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -22,6 +22,18 @@ async fn main() -> Result<()> {
 
     let repo_ = cli.get_repo(owner, repo).await?;
     println!("repo: {:#?}", repo_);
+
+    let hook = cli
+        .create_hook(
+            owner,
+            repo,
+            &CreateHookOption::new(
+                "https://foo.bar/hook",
+                Some("demo_token".to_string()),
+            ),
+        )
+        .await?;
+    println!("new hook: {:#?}", hook);
 
     let hooks = cli.list_hooks(owner, repo).await?;
     println!("hooks: {:#?}", hooks);
