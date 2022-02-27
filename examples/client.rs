@@ -41,7 +41,7 @@ async fn main() -> Result<()> {
 
     cli.delete_hook(owner, repo, hook.id).await?;
 
-    let statuses = cli.list_status(owner, repo, commit_id).await?;
+    let statuses = cli.list_statuses(owner, repo, commit_id).await?;
     println!("statuses: {:#?}", statuses);
 
     Ok(())
