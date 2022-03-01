@@ -10,7 +10,7 @@ use crate::{
     config::Config,
     hook::{CreateHookOption, Hook},
     repo::Repository,
-    status::Status,
+    status::{CreateStatusOption, Status},
     user::User,
     Error, Result,
 };
@@ -113,6 +113,7 @@ impl Gritlab {
         resp_json(resp, "create hook failed").await
     }
 
+    /// Delete a webhook
     pub async fn delete_hook(&self, owner: &str, repo: &str, id: i32) -> Result<()> {
         let resp = self
             .request(
@@ -159,6 +160,25 @@ impl Gritlab {
             .send()
             .await?;
         resp_json(resp, &format!("get status of commit-{} failed", commit)).await
+    }
+
+    /// Create a status
+    pub async fn create_status(
+        &self,
+        owner: &str,
+        repo: &str,
+        commit: &str,
+        opt: &CreateStatusOption,
+    ) -> Result<Status> {
+        let resp = self
+            .request(
+                Method::POST,
+                &format!("projects/{}/statuses/{}", repo_path(owner, repo), commit),
+            )?
+            .json(opt)
+            .send()
+            .await?;
+        resp_json(resp, &format!("create status of commit-{} failed", commit)).await
     }
 }
 

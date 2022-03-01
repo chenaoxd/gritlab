@@ -22,9 +22,21 @@ pub struct Status {
     pub target_url: String,
     pub description: String,
     pub created_at: DateTime<Utc>,
-    pub started_at: DateTime<Utc>,
+    pub started_at: Option<DateTime<Utc>>,
     pub finished_at: DateTime<Utc>,
     pub allow_failure: bool,
     pub coverage: Option<f32>,
     pub author: Author,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct CreateStatusOption {
+    pub state: String,
+    #[serde(rename = "ref")]
+    pub ref_: Option<String>,
+    pub name: Option<String>,
+    pub target_url: Option<String>,
+    pub description: Option<String>,
+    pub coverage: Option<f32>,
+    pub pipeline_id: Option<i32>,
 }

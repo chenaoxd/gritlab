@@ -1,12 +1,14 @@
 use std::env;
 
 use anyhow::Context;
-use gritlab::{client::Gritlab, hook::CreateHookOption, Result};
+use gritlab::{
+    client::Gritlab, hook::CreateHookOption, status::CreateStatusOption, Result,
+};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let (owner, repo) = ("contract", "scheduler");
-    let commit_id = "9ff565bcda2f8c88c5f095baed9c92ca13e8e9b4";
+    let (owner, repo) = ("chenao", "test-jarvis");
+    let commit_id = "ff0e6ddd616ffabfc02d6943b2aed496fca2c63c";
 
     let host = env::var("HOST")
         .with_context(|| format!("get environment variable HOST failed"))?;
@@ -40,6 +42,25 @@ async fn main() -> Result<()> {
     println!("hooks: {:#?}", hooks);
 
     cli.delete_hook(owner, repo, hook.id).await?;
+    println!("hook deleted");
+
+    let status = cli
+        .create_status(
+            owner,
+            repo,
+            commit_id,
+            &CreateStatusOption {
+                state: "failed".to_string(),
+                ref_: None,
+                name: Some("jarvis".to_string()),
+                target_url: Some("https://jarvis.chenaoxd.com/repo/1/jobs".to_string()),
+                description: Some("some description".to_string()),
+                coverage: None,
+                pipeline_id: None,
+            },
+        )
+        .await?;
+    println!("created status: {:#?}", status);
 
     let statuses = cli.list_statuses(owner, repo, commit_id).await?;
     println!("statuses: {:#?}", statuses);
