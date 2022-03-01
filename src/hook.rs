@@ -4,9 +4,9 @@ use serde_with::skip_serializing_none;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Hook {
-    pub id: i32,
+    pub id: i64,
     pub url: String,
-    pub project_id: i32,
+    pub project_id: i64,
     pub push_events: bool,
     pub push_events_branch_filter: Option<String>,
     pub issues_events: bool,

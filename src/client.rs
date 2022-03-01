@@ -114,7 +114,7 @@ impl Gritlab {
     }
 
     /// Delete a webhook
-    pub async fn delete_hook(&self, owner: &str, repo: &str, id: i32) -> Result<()> {
+    pub async fn delete_hook(&self, owner: &str, repo: &str, id: i64) -> Result<()> {
         let resp = self
             .request(
                 Method::DELETE,

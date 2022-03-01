@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Author {
-    pub id: i32,
+    pub id: i64,
     pub name: String,
     pub username: String,
     pub state: String,
@@ -13,7 +13,7 @@ pub struct Author {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Status {
-    pub id: i32,
+    pub id: i64,
     pub sha: String,
     #[serde(rename = "ref")]
     pub ref_: String,
@@ -25,7 +25,7 @@ pub struct Status {
     pub started_at: Option<DateTime<Utc>>,
     pub finished_at: DateTime<Utc>,
     pub allow_failure: bool,
-    pub coverage: Option<f32>,
+    pub coverage: Option<f64>,
     pub author: Author,
 }
 
@@ -37,6 +37,6 @@ pub struct CreateStatusOption {
     pub name: Option<String>,
     pub target_url: Option<String>,
     pub description: Option<String>,
-    pub coverage: Option<f32>,
-    pub pipeline_id: Option<i32>,
+    pub coverage: Option<f64>,
+    pub pipeline_id: Option<i64>,
 }
