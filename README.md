@@ -1,6 +1,6 @@
 # Gritlab
 
-`Gritlab` is a async gitea API sdk.
+`Gritlab` is a async gitlab API sdk.
 
 
 [![Crates.io][crates-badge]][crates-url]
