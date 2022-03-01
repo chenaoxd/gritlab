@@ -34,7 +34,7 @@ pub struct CreateStatusOption {
     pub state: String,
     #[serde(rename = "ref")]
     pub ref_: Option<String>,
-    pub name: Option<String>,
+    pub context: Option<String>,
     pub target_url: Option<String>,
     pub description: Option<String>,
     pub coverage: Option<f64>,

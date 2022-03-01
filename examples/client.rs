@@ -52,7 +52,7 @@ async fn main() -> Result<()> {
             &CreateStatusOption {
                 state: "failed".to_string(),
                 ref_: None,
-                name: Some("jarvis".to_string()),
+                context: Some("jarvis".to_string()),
                 target_url: Some("https://jarvis.chenaoxd.com/repo/1/jobs".to_string()),
                 description: Some("some description".to_string()),
                 coverage: None,
