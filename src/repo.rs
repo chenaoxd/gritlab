@@ -69,7 +69,7 @@ pub struct Permissions {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Repository {
     pub id: i64,
-    pub description: String,
+    pub description: Option<String>,
     pub name: String,
     pub name_with_namespace: String,
     pub path: String,
