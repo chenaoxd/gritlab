@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
@@ -67,4 +69,77 @@ impl CreateHookOption {
             wiki_page_events: None,
         }
     }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Project {
+    pub id: i64,
+    pub name: String,
+    pub description: String,
+    pub web_url: String,
+    pub avatar_url: Option<String>,
+    pub git_ssh_url: String,
+    pub git_http_url: String,
+    pub namespace: String,
+    pub visibility_level: i32,
+    pub path_with_namespace: String,
+    pub default_branch: String,
+    pub ci_config_path: Option<String>,
+    pub homepage: Option<String>,
+    pub url: String,
+    pub ssh_url: String,
+    pub http_url: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Author {
+    pub name: String,
+    pub email: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Commit {
+    pub id: String,
+    pub message: String,
+    pub title: String,
+    pub timestamp: DateTime<Utc>,
+    pub url: String,
+    pub author: Author,
+    pub added: Vec<String>,
+    pub modified: Vec<String>,
+    pub removed: Vec<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Repository {
+    pub name: String,
+    pub url: String,
+    pub description: String,
+    pub homepage: String,
+    pub git_http_url: String,
+    pub git_ssh_url: String,
+    pub visibility_level: i32,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PushPayload {
+    pub object_kind: String,
+    pub event_name: String,
+    pub before: String,
+    pub after: String,
+    #[serde(rename = "ref")]
+    pub ref_: String,
+    pub checkout_sha: String,
+    pub message: Option<String>,
+    pub user_id: i64,
+    pub user_name: String,
+    pub user_email: String,
+    pub user_avatar: Option<String>,
+    pub project_id: i64,
+    pub project: Project,
+    pub commits: Vec<Commit>,
+    pub total_commits_count: i64,
+    // TODO
+    pub push_options: HashMap<String, String>,
+    pub repository: Repository,
 }
