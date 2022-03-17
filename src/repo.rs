@@ -120,7 +120,7 @@ pub struct Repository {
     pub import_status: String,
     pub open_issues_count: i64,
     pub ci_default_git_depth: i64,
-    pub ci_forward_deployment_enabled: bool,
+    pub ci_forward_deployment_enabled: Option<bool>,
     pub public_jobs: bool,
     pub build_timeout: i64,
     pub auto_cancel_pending_pipelines: String,
