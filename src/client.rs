@@ -86,6 +86,16 @@ impl Gritlab {
         resp_json(resp, "list repos failed").await
     }
 
+    /// Search repos by query
+    pub async fn search_repos(&self, query: &str) -> Result<Vec<Repository>> {
+        let resp = self
+            .request(Method::GET, "projects")?
+            .query(&[("search", query)])
+            .send()
+            .await?;
+        resp_json(resp, "search repos failed").await
+    }
+
     /// Get the specified repo
     pub async fn get_repo(&self, owner: &str, repo: &str) -> Result<Repository> {
         let resp = self

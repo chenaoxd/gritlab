@@ -75,7 +75,7 @@ pub struct Repository {
     pub path: String,
     pub path_with_namespace: String,
     pub created_at: DateTime<Utc>,
-    pub default_branch: String,
+    pub default_branch: Option<String>,
     pub tag_list: Vec<String>,
     pub ssh_url_to_repo: String,
     pub http_url_to_repo: String,

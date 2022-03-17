@@ -23,6 +23,9 @@ async fn main() -> Result<()> {
     let _repos = cli.list_repos().await?;
     // println!("repos: {:#?}", repos);
 
+    let repos = cli.search_repos("test-jarvis").await?;
+    println!("repos: {:#?}", repos);
+
     let repo_ = cli.get_repo(owner, repo).await?;
     println!("repo: {:#?}", repo_);
 
