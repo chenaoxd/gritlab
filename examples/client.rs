@@ -20,7 +20,7 @@ async fn main() -> Result<()> {
     let user = cli.current_user().await?;
     println!("current_user: {:#?}", user);
 
-    let _repos = cli.list_repos().await?;
+    let _repos = cli.list_repos(None).await?;
     // println!("repos: {:#?}", repos);
 
     let repos = cli.search_repos("test-jarvis").await?;

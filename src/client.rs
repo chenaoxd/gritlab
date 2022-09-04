@@ -7,9 +7,10 @@ use reqwest::{Client, RequestBuilder};
 
 use crate::{
     builder::GritlabBuilder,
+    commit::{Commit, ListCommitsOption},
     config::Config,
     hook::{CreateHookOption, Hook},
-    repo::Repository,
+    repo::{ListProjectsOption, Repository},
     status::{CreateStatusOption, Status},
     user::User,
     Error, Result,
@@ -81,8 +82,15 @@ impl Gritlab {
     // ===============================================
 
     /// List all the repos which the user has permission to
-    pub async fn list_repos(&self) -> Result<Vec<Repository>> {
-        let resp = self.request(Method::GET, "projects")?.send().await?;
+    pub async fn list_repos(
+        &self,
+        opt: Option<ListProjectsOption>,
+    ) -> Result<Vec<Repository>> {
+        let resp = self
+            .request(Method::GET, "projects")?
+            .query(&opt)
+            .send()
+            .await?;
         resp_json(resp, "list repos failed").await
     }
 
@@ -150,6 +158,24 @@ impl Gritlab {
     // ===============================================
     // Commit related apis
     // ===============================================
+
+    /// List repo commits
+    pub async fn list_repo_commits(
+        &self,
+        owner: &str,
+        repo: &str,
+        opt: Option<ListCommitsOption>,
+    ) -> Result<Vec<Commit>> {
+        let resp = self
+            .request(
+                Method::GET,
+                &format!("projects/{}/repository/commits", repo_path(owner, repo)),
+            )?
+            .query(&opt)
+            .send()
+            .await?;
+        resp_json(resp, "failed to list repo commits").await
+    }
 
     /// List statuses of the commit
     pub async fn list_statuses(

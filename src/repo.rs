@@ -66,6 +66,63 @@ pub struct Permissions {
     pub group_access: Option<Access>,
 }
 
+// TODO: use macro to eliminate so many skip_serializing_if annos
+#[derive(Debug, Default, Deserialize, Serialize)]
+pub struct ListProjectsOption {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archived: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_after: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_before: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imported: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_activity_after: Option<DateTime<Utc>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_activity_before: Option<DateTime<Utc>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub membership: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_access_level: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_by: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owned: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_checksum_failed: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_storage: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_namespaces: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simple: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starred: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_id: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub visibility: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wiki_checksum_failed: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wiki_custom_attributes: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wiki_issues_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wiki_merge_requests_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub with_programming_language: Option<String>,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Repository {
     pub id: i64,
