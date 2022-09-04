@@ -23,14 +23,14 @@ pub struct ListCommitsOption {
     pub trailers: Option<bool>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Stat {
     pub additions: i64,
     pub deletions: i64,
     pub total: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Commit {
     pub id: String,
     pub short_id: String,
